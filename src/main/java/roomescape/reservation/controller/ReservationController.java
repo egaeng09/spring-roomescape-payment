@@ -22,6 +22,7 @@ import roomescape.member.domain.Role;
 import roomescape.reservation.controller.dto.AvailableReservationTimeWebResponse;
 import roomescape.reservation.controller.dto.CreateReservationWebRequest;
 import roomescape.reservation.controller.dto.CreateReservationWithMemberIdWebRequest;
+import roomescape.reservation.controller.dto.CreateWaitingWebRequest;
 import roomescape.reservation.controller.dto.ReservationSearchWebRequest;
 import roomescape.reservation.controller.dto.ReservationWebResponse;
 import roomescape.reservation.controller.dto.ReservationWithStatusResponse;
@@ -75,10 +76,10 @@ public class ReservationController {
 
     @PostMapping("/waitings")
     public ResponseEntity<ReservationWithStatusResponse> createWaiting(
-        @RequestBody final CreateReservationWebRequest createReservationWebRequest,
+        @RequestBody final CreateWaitingWebRequest createWaitingWebRequest,
         @LoginMember MemberInfo memberInfo) {
         final ReservationWithStatusResponse reservationWithStatusResponse = reservationService.createWaiting(
-            createReservationWebRequest,
+            createWaitingWebRequest,
             memberInfo);
         final URI location = UriFactory.buildPath(BASE_PATH,
             String.valueOf(reservationWithStatusResponse.id()));

@@ -1,14 +1,13 @@
 package roomescape.common.uri;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import roomescape.common.utils.UriFactory;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class UriFactoryTest {
 
@@ -46,8 +45,8 @@ class UriFactoryTest {
     void buildInvalidPath1() {
         // when & then
         assertThatThrownBy(() -> UriFactory.buildPath(null, "bye", "saturday", "hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("basePath는 최소한 / 가 필요합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("basePath는 최소한 / 가 필요합니다.");
     }
 
     @Test
@@ -55,17 +54,18 @@ class UriFactoryTest {
     void buildInvalidPath2() {
         // when & then
         assertThatThrownBy(() -> UriFactory.buildPath("", "bye", "saturday", "hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("basePath는 최소한 / 가 필요합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("basePath는 최소한 / 가 필요합니다.");
     }
 
     @Test
     @DisplayName("각 PathSegment는 /를 포함할 수 없다")
     void buildInvalidPath3() {
         // when & then
-        assertThatThrownBy(() -> UriFactory.buildPath("/gang-san", "/bye", "saturday", "/hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("pathSegment는 /를 포함할 수 없습니다.");
+        assertThatThrownBy(
+            () -> UriFactory.buildPath("/gang-san", "/bye", "saturday", "/hi", "sunday"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("pathSegment는 /를 포함할 수 없습니다.");
     }
 
     @Test
@@ -73,24 +73,27 @@ class UriFactoryTest {
     void buildInvalidPath4() {
         // when & then
         assertThatThrownBy(() -> UriFactory.buildPath("/gang-san", "", "saturday", "", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("pathSegment는 null이거나 빈 문자열일 수 없습니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("pathSegment는 null이거나 빈 문자열일 수 없습니다.");
     }
 
     @Test
     @DisplayName("BasePath는 /로 시작해야 한다")
     void buildInvalidPath5() {
         // when & then
-        assertThatThrownBy(() -> UriFactory.buildPath("gang-san/", "bye", "saturday", "hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("basePath는 /로 시작해야 합니다.");
+        assertThatThrownBy(
+            () -> UriFactory.buildPath("gang-san/", "bye", "saturday", "hi", "sunday"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("basePath는 /로 시작해야 합니다.");
 
-        assertThatThrownBy(() -> UriFactory.buildPath("gang/san", "bye", "saturday", "hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("basePath는 /로 시작해야 합니다.");
+        assertThatThrownBy(
+            () -> UriFactory.buildPath("gang/san", "bye", "saturday", "hi", "sunday"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("basePath는 /로 시작해야 합니다.");
 
-        assertThatThrownBy(() -> UriFactory.buildPath("gang-san", "bye", "saturday", "hi", "sunday"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("basePath는 /로 시작해야 합니다.");
+        assertThatThrownBy(
+            () -> UriFactory.buildPath("gang-san", "bye", "saturday", "hi", "sunday"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("basePath는 /로 시작해야 합니다.");
     }
 }
