@@ -73,6 +73,19 @@ public class ReservationController {
                 .body(reservationWithStatusResponse);
     }
 
+    @PostMapping("/waitings")
+    public ResponseEntity<ReservationWithStatusResponse> createWaiting(
+        @RequestBody final CreateReservationWebRequest createReservationWebRequest,
+        @LoginMember MemberInfo memberInfo) {
+        final ReservationWithStatusResponse reservationWithStatusResponse = reservationService.createWaiting(
+            createReservationWebRequest,
+            memberInfo);
+        final URI location = UriFactory.buildPath(BASE_PATH,
+            String.valueOf(reservationWithStatusResponse.id()));
+        return ResponseEntity.created(location)
+            .body(reservationWithStatusResponse);
+    }
+
     @PostMapping("/admin" + BASE_PATH)
     public ResponseEntity<ReservationWebResponse> createReservationByAdmin(
             @RequestBody final CreateReservationWithMemberIdWebRequest createReservationWithMemberIdWebRequest) {

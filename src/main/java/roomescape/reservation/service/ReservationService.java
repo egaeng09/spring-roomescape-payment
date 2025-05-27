@@ -88,10 +88,8 @@ public class ReservationService {
                 createReservationWebRequest.timeId(),
                 createReservationWebRequest.themeId())
         ) {
+            throw new AlreadyExistException("이미 예약이 존재합니다.");
 
-            validateExistOwnReservation(createReservationWebRequest, memberInfo);
-
-            return createWaiting(createReservationWebRequest, memberInfo);
         }
 
         return ReservationConverter.toDtoWithStatus(
@@ -101,6 +99,25 @@ public class ReservationService {
                                 createReservationWebRequest.date(),
                                 createReservationWebRequest.timeId(),
                                 createReservationWebRequest.themeId()))
+        );
+    }
+
+    public ReservationWithStatusResponse createWaiting(
+        final CreateReservationWebRequest createReservationWebRequest,
+        final MemberInfo memberInfo
+    ) {
+
+        validateExistOwnReservation(createReservationWebRequest, memberInfo);
+
+        return ReservationConverter.toDtoWithStatus(
+            waitingCommandUseCase.create(
+                new CreateReservationWithMemberIdServiceRequest(
+                    memberInfo.id(),
+                    createReservationWebRequest.date(),
+                    createReservationWebRequest.timeId(),
+                    createReservationWebRequest.themeId()
+                )
+            )
         );
     }
 
@@ -131,23 +148,6 @@ public class ReservationService {
                 .stream()
                 .map(ReservationConverter::toDto)
                 .toList();
-    }
-
-    private ReservationWithStatusResponse createWaiting(
-            final CreateReservationWebRequest createReservationWebRequest,
-            final MemberInfo memberInfo
-    ) {
-
-        return ReservationConverter.toDtoWithStatus(
-                waitingCommandUseCase.create(
-                        new CreateReservationWithMemberIdServiceRequest(
-                                memberInfo.id(),
-                                createReservationWebRequest.date(),
-                                createReservationWebRequest.timeId(),
-                                createReservationWebRequest.themeId()
-                        )
-                )
-        );
     }
 
     private void validateExistOwnReservation(final CreateReservationWebRequest createReservationWebRequest,
