@@ -266,3 +266,39 @@ async function fetchReservationPayment(paymentData, reservationData) {
         console.error(error.message);
     });
 }
+
+function onWaitButtonClick() {
+    const selectedDate = document.getElementById("datepicker").value;
+    const selectedThemeId = document.querySelector('.theme-slot.active')?.getAttribute('data-theme-id');
+    const selectedTimeId = document.querySelector('.time-slot.active')?.getAttribute('data-time-id');
+
+    if (selectedDate && selectedThemeId && selectedTimeId) {
+        const reservationData = {
+            date: selectedDate,
+            themeId: selectedThemeId,
+            timeId: selectedTimeId
+        };
+
+        fetch('/reservations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservationData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Reservation failed');
+                return response.json();
+            })
+            .then(data => {
+                alert("Reservation successful!");
+                location.reload();
+            })
+            .catch(error => {
+                alert("An error occurred while making the reservation.");
+                console.error(error);
+            });
+    } else {
+        alert("Please select a date, theme, and time before making a reservation.");
+    }
+}
