@@ -11,8 +11,7 @@ public record PaymentClientResponse(
     Long totalAmount,
     String status,
     String requestedAt,
-    String approvedAt,
-    PaymentClientErrorResponse failure
+    String approvedAt
 ) {
 
     public PaymentClientResponse {
