@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import roomescape.common.exception.PaymentErrorCode;
 import roomescape.common.exception.PaymentException;
@@ -17,18 +17,24 @@ import roomescape.payment.service.dto.PaymentClientErrorResponse;
 import roomescape.payment.service.dto.PaymentClientResponse;
 import roomescape.payment.service.dto.PaymentConfirmRequest;
 
-@RequiredArgsConstructor
+@Component
 public class PaymentRestClient implements PaymentClient {
 
     private final RestClient restClient;
 
-    @Value("${payment.key}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
+
+    public PaymentRestClient(RestClient restClient,
+        @Value("${payment.key}") String SECRET_KEY) {
+        this.restClient = restClient;
+        this.SECRET_KEY = SECRET_KEY;
+    }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final Set<String> serverErrorCases = Set.of(
-        "INVALID_API_KEY", "INVALID_AUTHORIZE_AUTH", "NOT_FOUND_TERMINAL_ID", "UNAUTHORIZED_KEY",
+        "INVALID_API_KEY", "INVALID_AUTHORIZE_AUTH",
+        "NOT_FOUND_TERMINAL_ID", "UNAUTHORIZED_KEY",
         "INCORRECT_BASIC_AUTH_FORMAT"
     );
 
@@ -41,9 +47,7 @@ public class PaymentRestClient implements PaymentClient {
             .retrieve()
             .onStatus(
                 status -> status.is4xxClientError() || status.is5xxServerError(),
-                (req, res) -> {
-                    handlePaymentError(res);
-                }
+                (req, res) -> handlePaymentError(res)
             )
             .body(PaymentClientResponse.class);
     }
@@ -59,14 +63,14 @@ public class PaymentRestClient implements PaymentClient {
         }
     }
 
-    private static IllegalArgumentException getPaymentError(
+    private PaymentException getPaymentError(
         PaymentClientErrorResponse error, HttpStatusCode httpStatusCode) {
         if (serverErrorCases.contains(error.code())) {
-            throw new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
+            throw new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
         }
         if (httpStatusCode.is4xxClientError()) {
             throw new PaymentException(error.message(), PaymentErrorCode.CLIENT_ERROR);
         }
-        throw new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
+        throw new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
     }
 }
