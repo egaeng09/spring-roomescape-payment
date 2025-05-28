@@ -21,11 +21,11 @@ public class ErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static ErrorResponse of(ErrorCode errorCode, HttpServletRequest request) {
-        return new ErrorResponse(errorCode.getStatusValue(), errorCode.name(), errorCode.getMessage(), request.getMethod(), request.getRequestURI());
+    public static ErrorResponse of(CustomException e, HttpServletRequest request) {
+        return new ErrorResponse(e.getErrorCode().getStatusValue(), e.getErrorCode().name(), e.getMessageForClient(), request.getMethod(), request.getRequestURI());
     }
 
-    public static ErrorResponse of(ErrorCode errorCode, String message, HttpServletRequest request) {
-        return new ErrorResponse(errorCode.getStatusValue(), errorCode.name(), message, request.getMethod(), request.getRequestURI());
+    public static ErrorResponse of(ErrorCode errorCode, HttpServletRequest request) {
+        return new ErrorResponse(errorCode.getStatusValue(), errorCode.name(), errorCode.getMessage(), request.getMethod(), request.getRequestURI());
     }
 }

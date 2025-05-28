@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import roomescape.common.exception.AuthenticationException;
-import roomescape.common.exception.ErrorCode;
+import roomescape.common.exception.GenaralErrorCode;
 import roomescape.member.auth.jwt.JwtTokenExtractor;
 import roomescape.member.auth.jwt.JwtTokenProvider;
 import roomescape.member.auth.vo.MemberInfo;
@@ -54,7 +54,7 @@ public class AuthService {
         try {
             return MemberConverter.toDto(accountMemberService.get(jwtTokenExtractor.extractMemberIdFromToken(token)));
         } catch (final AuthenticationException e) {
-            throw new AuthenticationException("token이 올바르지 않습니다.", ErrorCode.INVALID_AUTH_INFO);
+            throw new AuthenticationException("token이 올바르지 않습니다.", GenaralErrorCode.INVALID_AUTH_INFO);
         }
     }
 

@@ -3,10 +3,10 @@ package roomescape.common.exception;
 public class ReferencedByOtherException extends CustomException {
 
     public ReferencedByOtherException(String message) {
-        super(message, ErrorCode.CONFLICT);
+        super(message, GenaralErrorCode.CONFLICT);
     }
 
-    public ReferencedByOtherException(String message, ErrorCode errorCode) {
-        super(message, errorCode);
+    public ReferencedByOtherException(String message, GenaralErrorCode genaralErrorCode) {
+        super(message, genaralErrorCode);
     }
 }

@@ -13,8 +13,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ErrorResponse> handleDateTimeParseException(final HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_DATETIME_FORMAT, request);
+        ErrorResponse errorResponse = ErrorResponse.of(GenaralErrorCode.INVALID_DATETIME_FORMAT, request);
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentException(final PaymentException e,
+        final HttpServletRequest request) {
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse errorResponse = ErrorResponse.of(e, request);
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
     }
 
     @ExceptionHandler(CustomException.class)
@@ -28,7 +36,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleAllException(final HttpServletRequest request, RuntimeException e) {
         log.error(e.getMessage(), e);
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, request);
+        ErrorResponse errorResponse = ErrorResponse.of(GenaralErrorCode.INTERNAL_SERVER_ERROR, request);
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 }

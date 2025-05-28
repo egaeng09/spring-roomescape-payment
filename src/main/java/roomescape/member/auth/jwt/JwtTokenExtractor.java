@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import roomescape.common.exception.AuthenticationException;
 import roomescape.common.exception.AuthorizationException;
-import roomescape.common.exception.ErrorCode;
+import roomescape.common.exception.GenaralErrorCode;
 import roomescape.member.domain.MemberName;
 
 @Component
@@ -21,7 +21,7 @@ public class JwtTokenExtractor {
 
     public String extractTokenFromCookie(Cookie[] cookies) {
         if (cookies == null) {
-            throw new AuthorizationException("로그인이 필요합니다.", ErrorCode.MUST_BE_MEMBER);
+            throw new AuthorizationException("로그인이 필요합니다.", GenaralErrorCode.MUST_BE_MEMBER);
         }
 
         for (Cookie cookie : cookies) {
@@ -30,7 +30,7 @@ public class JwtTokenExtractor {
             }
         }
 
-        throw new AuthorizationException("로그인이 필요합니다.", ErrorCode.MUST_BE_MEMBER);
+        throw new AuthorizationException("로그인이 필요합니다.", GenaralErrorCode.MUST_BE_MEMBER);
     }
 
     public MemberName extractMemberNameFromToken(String token) {
@@ -51,11 +51,11 @@ public class JwtTokenExtractor {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (MalformedJwtException e) {
-            throw new AuthenticationException("잘못된 토큰입니다.", ErrorCode.INVALID_AUTH_INFO);
+            throw new AuthenticationException("잘못된 토큰입니다.", GenaralErrorCode.INVALID_AUTH_INFO);
         } catch (ExpiredJwtException e) {
-            throw new AuthenticationException("만료된 토큰입니다.", ErrorCode.EXPIRED_TOKEN);
+            throw new AuthenticationException("만료된 토큰입니다.", GenaralErrorCode.EXPIRED_TOKEN);
         } catch (JwtException e) {
-            throw new AuthenticationException("토큰이 유효하지 않습니다.", ErrorCode.INVALID_AUTH_INFO);
+            throw new AuthenticationException("토큰이 유효하지 않습니다.", GenaralErrorCode.INVALID_AUTH_INFO);
         }
     }
 }

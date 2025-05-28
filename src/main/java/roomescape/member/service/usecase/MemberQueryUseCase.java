@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomescape.common.exception.AuthenticationException;
-import roomescape.common.exception.ErrorCode;
+import roomescape.common.exception.GenaralErrorCode;
 import roomescape.member.auth.vo.MemberInfo;
 import roomescape.member.domain.Member;
 import roomescape.member.repository.MemberRepository;
@@ -18,7 +18,7 @@ public class MemberQueryUseCase {
 
     public Member get(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new AuthenticationException("등록된 회원이 아닙니다.", ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new AuthenticationException("등록된 회원이 아닙니다.", GenaralErrorCode.MEMBER_NOT_FOUND));
     }
 
     public List<MemberInfo> getAll() {
