@@ -18,8 +18,7 @@ public enum GenaralErrorCode implements ErrorCode {
     MUST_BE_MEMBER(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
     INVALID_MEMBER_INFO(HttpStatus.UNAUTHORIZED, "가입되지 않은 이메일이거나, 비밀번호가 잘못되었습니다."),
     CONFLICT_RESERVATION_TIME(HttpStatus.CONFLICT, "예약이 존재하는 시간은 삭제할 수 없습니다."),
-
-    PAYMENT_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "결제 처리 중 알 수 없는 오류가 발생했습니다. 잠시 후 시도해주세요."),
+    EXTERNAL_SERVER_CONNECTION_ERROR(HttpStatus.GATEWAY_TIMEOUT, "서버 응답이 지연되고 있습니다. 잠시 후 시도해주세요."),
     ;
 
     private final HttpStatus status;

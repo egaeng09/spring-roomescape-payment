@@ -1,6 +1,5 @@
 package roomescape.common.exception;
 
-import java.util.Set;
 import org.springframework.http.HttpStatus;
 
 public enum PaymentErrorCode implements ErrorCode {
@@ -10,11 +9,6 @@ public enum PaymentErrorCode implements ErrorCode {
 
     private final HttpStatus status;
     private final String message;
-
-    private static final Set<String> serverErrorCases = Set.of(
-        "INVALID_API_KEY", "INVALID_AUTHORIZE_AUTH", "NOT_FOUND_TERMINAL_ID", "UNAUTHORIZED_KEY",
-        "INCORRECT_BASIC_AUTH_FORMAT"
-    );
 
     PaymentErrorCode(HttpStatus status, String message) {
         this.status = status;
