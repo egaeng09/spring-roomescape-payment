@@ -3,6 +3,6 @@ package roomescape.common.exception;
 public class InvalidInputException extends CustomException {
 
     public InvalidInputException(String message) {
-        super(message, GenaralErrorCode.INVALID_INPUT);
+        super(message, GeneralErrorCode.INVALID_INPUT);
     }
 }

@@ -2,7 +2,7 @@ package roomescape.common.exception;
 
 import org.springframework.http.HttpStatus;
 
-public enum GenaralErrorCode implements ErrorCode {
+public enum GeneralErrorCode implements ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 부족합니다."),
@@ -24,7 +24,7 @@ public enum GenaralErrorCode implements ErrorCode {
     private final HttpStatus status;
     private final String message;
 
-    GenaralErrorCode(HttpStatus status, String message) {
+    GeneralErrorCode(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
     }

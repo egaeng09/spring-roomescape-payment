@@ -3,10 +3,10 @@ package roomescape.common.exception;
 public class AuthenticationException extends CustomException {
 
     public AuthenticationException(String message) {
-        super(message, GenaralErrorCode.UNAUTHORIZED);
+        super(message, GeneralErrorCode.UNAUTHORIZED);
     }
 
-    public AuthenticationException(String message, GenaralErrorCode genaralErrorCode) {
-        super(message, genaralErrorCode);
+    public AuthenticationException(String message, GeneralErrorCode generalErrorCode) {
+        super(message, generalErrorCode);
     }
 }
