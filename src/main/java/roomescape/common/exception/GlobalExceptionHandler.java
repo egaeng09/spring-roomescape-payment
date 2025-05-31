@@ -36,6 +36,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
     }
 
+    @ExceptionHandler(ConnectTimeOutException.class)
+    public ResponseEntity<ErrorResponse> handleConnectTimeOutException(final ConnectTimeOutException e,
+                                                               final HttpServletRequest request) {
+        log.debug(e.getMessage(), e);
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode, request);
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleAllException(final HttpServletRequest request, RuntimeException e) {
         log.error(e.getMessage(), e);
