@@ -76,6 +76,17 @@ public class PaymentRestClient implements PaymentClient {
         }
     }
 
+    private PaymentException getPaymentError(
+        PaymentClientErrorResponse error, HttpStatusCode httpStatusCode) {
+        if (serverErrorCases.contains(error.code())) {
+            return new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
+        }
+        if (httpStatusCode.is4xxClientError()) {
+            return new PaymentException(error.message(), PaymentErrorCode.CLIENT_ERROR);
+        }
+        return new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
+    }
+
     private ConnectionException getConnectionException(final RestClientException e) {
         final Throwable cause = e.getCause();
 
@@ -95,16 +106,5 @@ public class PaymentRestClient implements PaymentClient {
         }
 
         throw e;
-    }
-
-    private PaymentException getPaymentError(
-        PaymentClientErrorResponse error, HttpStatusCode httpStatusCode) {
-        if (serverErrorCases.contains(error.code())) {
-            return new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
-        }
-        if (httpStatusCode.is4xxClientError()) {
-            return new PaymentException(error.message(), PaymentErrorCode.CLIENT_ERROR);
-        }
-        return new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
     }
 }
