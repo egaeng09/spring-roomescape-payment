@@ -20,7 +20,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
-import roomescape.common.exception.ConnectionException;
+import roomescape.common.exception.ConnectTimeOutException;
+import roomescape.common.exception.ReadTimeOutException;
 import roomescape.common.exception.error.PaymentErrorCode;
 import roomescape.common.exception.PaymentException;
 import roomescape.payment.service.dto.PaymentClientErrorResponse;
@@ -64,12 +65,12 @@ class PaymentServerTest {
     @Test
     @DisplayName("결제 승인 요청이 성공한다")
     void confirmPaymentSuccess() throws Exception {
-        PaymentConfirmRequest requestDto = new PaymentConfirmRequest("orderId123", "15000L", 1500L);
-        PaymentClientResponse expectedResponseDto = new PaymentClientResponse(
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest("orderId123", "15000L", 1500L);
+        final PaymentClientResponse expectedResponseDto = new PaymentClientResponse(
                 "paymentKey", "orderId", 1500L, "DONE",
                 "2022-06-08T15:40:09+09:0", "2022-06-08T15:40:49+09:00"
         );
-        String expectedJsonResponse = objectMapper.writeValueAsString(expectedResponseDto);
+        final String expectedJsonResponse = objectMapper.writeValueAsString(expectedResponseDto);
 
         mockWebServer.enqueue(
                 new MockResponse()
@@ -93,11 +94,11 @@ class PaymentServerTest {
     })
     @DisplayName("결제 승인 요청 4xx 응답의 원인이 서버에 있다면 500 예외를 발생시킨다")
     void confirmPaymentClientErrorToServerError(String code) throws JsonProcessingException {
-        PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
                 "paymentKey", "orderId", 1000L);
-        PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
+        final PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
                 code, null, null);
-        String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
+        final String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
 
         mockWebServer.enqueue(
                 new MockResponse()
@@ -114,11 +115,11 @@ class PaymentServerTest {
     @Test
     @DisplayName("일반적인 4xx 예외라면 4xx 예외를 던진다")
     void confirmPaymentClientError() throws JsonProcessingException {
-        PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
                 "paymentKey", "orderId", 1000L);
-        PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
+        final PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
                 "ALREADY_PROCESSED_PAYMENT", "이미 처리된 결제 입니다.", null);
-        String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
+        final String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
 
         mockWebServer.enqueue(
                 new MockResponse()
@@ -135,11 +136,11 @@ class PaymentServerTest {
     @Test
     @DisplayName("일반적인 5xx 예외라면 500 예외를 발생시킨다")
     void confirmPaymentServerError() throws JsonProcessingException {
-        PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
                 "paymentKey", "orderId", 1000L);
-        PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
+        final PaymentClientErrorResponse errorResponseDto = new PaymentClientErrorResponse(
                 "FAILED_INTERNAL_SYSTEM_PROCESSING", "내부 시스템 처리 작업이 실패했습니다. 잠시 후 다시 시도해주세요.", null);
-        String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
+        final String errorJsonResponse = objectMapper.writeValueAsString(errorResponseDto);
 
         mockWebServer.enqueue(
                 new MockResponse()
@@ -156,7 +157,7 @@ class PaymentServerTest {
     @Test
     @DisplayName("ReadTimeout 초과시 예외가 발생한다")
     void readTimeout() {
-        PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
                 "paymentKey", "orderId", 1000L);
 
         mockWebServer.enqueue(
@@ -165,6 +166,26 @@ class PaymentServerTest {
         );
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
-                .isInstanceOf(ConnectionException.class);
+                .isInstanceOf(ReadTimeOutException.class);
+    }
+
+    @Test
+    @DisplayName("ConnectTimeout 초과시 예외가 발생한다")
+    void connectTimeout(){
+        final PaymentConfirmRequest requestDto = new PaymentConfirmRequest(
+                "paymentKey", "orderId", 1000L);
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(Duration.ofSeconds(TIME_OUT_SECOND));
+
+        final RestClient restClient = RestClient.builder()
+                .baseUrl(mockWebServer.url("http://10.255.255.1:8080").toString())
+                .requestFactory(requestFactory)
+                .build();
+
+        paymentRestClient = new PaymentRestClient(restClient, TEST_SECRET_KEY);
+
+        assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
+                .isInstanceOf(ConnectTimeOutException.class);
     }
 }

@@ -27,8 +27,8 @@ import roomescape.payment.service.dto.PaymentConfirmRequest;
 @Component
 public class PaymentRestClient implements PaymentClient {
 
-    private static final String READ_TIME_OUT_MESSAGE = "Read Timed out";
-    private static final String CONNECT_TIME_OUT_MESSAGE = "Connect Time Out";
+    private static final String READ_TIME_OUT_MESSAGE = "Read timed out";
+    private static final String CONNECT_TIME_OUT_MESSAGE = "Connect timed out";
     private static final Set<String> serverErrorCases = Set.of(
             "INVALID_API_KEY", "INVALID_AUTHORIZE_AUTH",
             "NOT_FOUND_TERMINAL_ID", "UNAUTHORIZED_KEY",
