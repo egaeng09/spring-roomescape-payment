@@ -2,6 +2,7 @@ package roomescape.payment.service.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Set;
@@ -12,9 +13,13 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import roomescape.common.exception.ConnectTimeOutException;
 import roomescape.common.exception.ConnectionException;
 import roomescape.common.exception.PaymentErrorCode;
 import roomescape.common.exception.PaymentException;
+import roomescape.common.exception.ReadTimeOutException;
+import roomescape.common.exception.TimeOutException;
 import roomescape.payment.service.dto.PaymentClientErrorResponse;
 import roomescape.payment.service.dto.PaymentClientResponse;
 import roomescape.payment.service.dto.PaymentConfirmRequest;
@@ -22,6 +27,8 @@ import roomescape.payment.service.dto.PaymentConfirmRequest;
 @Component
 public class PaymentRestClient implements PaymentClient {
 
+    private static final String READ_TIME_OUT_MESSAGE = "Read Timed out";
+    private static final String CONNECT_TIME_OUT_MESSAGE = "Connect Time Out";
     private static final Set<String> serverErrorCases = Set.of(
             "INVALID_API_KEY", "INVALID_AUTHORIZE_AUTH",
             "NOT_FOUND_TERMINAL_ID", "UNAUTHORIZED_KEY",
@@ -53,8 +60,8 @@ public class PaymentRestClient implements PaymentClient {
                             (req, res) -> handlePaymentError(res)
                     )
                     .body(PaymentClientResponse.class);
-        } catch (final ResourceAccessException e) {
-            throw new ConnectionException(e.getCause().getMessage());
+        } catch (final RestClientException e) {
+            throw getConnectionException(e);
         }
     }
 
@@ -69,14 +76,35 @@ public class PaymentRestClient implements PaymentClient {
         }
     }
 
+    private ConnectionException getConnectionException(final RestClientException e) {
+        final Throwable cause = e.getCause();
+
+        if (cause instanceof SocketTimeoutException) {
+            String message = cause.getMessage();
+            if (message.equals(READ_TIME_OUT_MESSAGE)) {
+                return new ReadTimeOutException(cause.getMessage());
+            }
+            if (message.equals(CONNECT_TIME_OUT_MESSAGE)) {
+                return new ConnectTimeOutException(cause.getMessage());
+            }
+            return new TimeOutException(cause.getMessage());
+        }
+
+        if (e instanceof ResourceAccessException) {
+            throw new ConnectionException(e.getMessage());
+        }
+
+        throw e;
+    }
+
     private PaymentException getPaymentError(
         PaymentClientErrorResponse error, HttpStatusCode httpStatusCode) {
         if (serverErrorCases.contains(error.code())) {
-            throw new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
+            return new PaymentException(error.message(), PaymentErrorCode.SERVER_ERROR);
         }
         if (httpStatusCode.is4xxClientError()) {
-            throw new PaymentException(error.message(), PaymentErrorCode.CLIENT_ERROR);
+            return new PaymentException(error.message(), PaymentErrorCode.CLIENT_ERROR);
         }
-        throw new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
+        return new PaymentException(error.message(), PaymentErrorCode.PAYMENT_SERVER_ERROR);
     }
 }

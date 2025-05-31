@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.SocketPolicy;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,7 +155,6 @@ class PaymentServerTest {
                 .hasFieldOrPropertyWithValue("errorCode", PaymentErrorCode.PAYMENT_SERVER_ERROR);
     }
 
-    @Disabled
     @Test
     @DisplayName("ReadTimeout 초과시 예외가 발생한다")
     void readTimeout() {
@@ -163,7 +163,7 @@ class PaymentServerTest {
 
         mockWebServer.enqueue(
                 new MockResponse()
-                        .setBodyDelay(TIME_OUT_SECOND + 10, TimeUnit.SECONDS)
+                        .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         );
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))

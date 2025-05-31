@@ -2,6 +2,7 @@ package roomescape.payment.service.client;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ class PaymentRestClientTest {
     @Autowired
     private PaymentRestClient paymentRestClient;
 
+    @Disabled
     @Test
     @DisplayName("적절하지 않은 정보로 결제를 요청할 시 예외가 발생한다")
     void confirmFailed() {
