@@ -1,5 +1,7 @@
 package roomescape.common.exception;
 
+import roomescape.common.exception.error.ErrorCode;
+
 public class TimeOutException extends ConnectionException {
 
     public TimeOutException(String message) {

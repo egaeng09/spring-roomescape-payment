@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import roomescape.common.exception.error.ErrorCode;
+import roomescape.common.exception.error.ErrorResponse;
+import roomescape.common.exception.error.GeneralErrorCode;
 
 @Slf4j
 @RestControllerAdvice

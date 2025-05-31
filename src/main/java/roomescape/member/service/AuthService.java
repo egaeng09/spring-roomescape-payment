@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import roomescape.common.exception.AuthenticationException;
-import roomescape.common.exception.GeneralErrorCode;
+import roomescape.common.exception.error.GeneralErrorCode;
 import roomescape.member.auth.jwt.JwtTokenExtractor;
 import roomescape.member.auth.jwt.JwtTokenProvider;
 import roomescape.member.auth.vo.MemberInfo;

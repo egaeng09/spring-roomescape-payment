@@ -1,5 +1,8 @@
 package roomescape.common.exception;
 
+import roomescape.common.exception.error.ErrorCode;
+import roomescape.common.exception.error.GeneralErrorCode;
+
 public class ConnectionException extends CustomException {
 
     public ConnectionException(String message) {

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import roomescape.common.exception.AuthenticationException;
 import roomescape.common.exception.AuthorizationException;
-import roomescape.common.exception.GeneralErrorCode;
+import roomescape.common.exception.error.GeneralErrorCode;
 import roomescape.member.domain.MemberName;
 
 @Component

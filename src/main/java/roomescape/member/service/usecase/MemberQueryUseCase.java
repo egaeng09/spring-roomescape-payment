@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomescape.common.exception.AuthenticationException;
-import roomescape.common.exception.GeneralErrorCode;
+import roomescape.common.exception.error.GeneralErrorCode;
 import roomescape.member.auth.vo.MemberInfo;
 import roomescape.member.domain.Member;
 import roomescape.member.repository.MemberRepository;

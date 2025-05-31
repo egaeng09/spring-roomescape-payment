@@ -1,5 +1,7 @@
 package roomescape.common.exception;
 
+import roomescape.common.exception.error.GeneralErrorCode;
+
 public class BadRequestException extends CustomException {
 
     public BadRequestException() {

@@ -1,8 +1,9 @@
-package roomescape.common.exception;
+package roomescape.common.exception.error;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import roomescape.common.exception.CustomException;
 
 @Getter
 public class ErrorResponse {

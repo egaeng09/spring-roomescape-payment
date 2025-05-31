@@ -16,7 +16,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import roomescape.common.exception.ConnectTimeOutException;
 import roomescape.common.exception.ConnectionException;
-import roomescape.common.exception.PaymentErrorCode;
+import roomescape.common.exception.error.PaymentErrorCode;
 import roomescape.common.exception.PaymentException;
 import roomescape.common.exception.ReadTimeOutException;
 import roomescape.common.exception.TimeOutException;
