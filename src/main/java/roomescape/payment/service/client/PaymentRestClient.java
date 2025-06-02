@@ -92,10 +92,10 @@ public class PaymentRestClient implements PaymentClient {
 
         if (cause instanceof SocketTimeoutException) {
             String message = cause.getMessage();
-            if (message.equals(READ_TIME_OUT_MESSAGE)) {
+            if (READ_TIME_OUT_MESSAGE.equals(message)) {
                 return new ReadTimeOutException(cause.getMessage());
             }
-            if (message.equals(CONNECT_TIME_OUT_MESSAGE)) {
+            if (CONNECT_TIME_OUT_MESSAGE.equals(message)) {
                 return new ConnectTimeOutException(cause.getMessage());
             }
             return new TimeOutException(cause.getMessage());
