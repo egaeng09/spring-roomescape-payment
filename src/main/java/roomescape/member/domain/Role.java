@@ -1,8 +1,10 @@
 package roomescape.member.domain;
 
 import java.util.Arrays;
+import lombok.Getter;
 import roomescape.common.exception.NotFoundException;
 
+@Getter
 public enum Role {
 
     MEMBER("1", "회원"),
@@ -33,13 +35,5 @@ public enum Role {
 
     public boolean isEqual(Role role) {
         return this.equals(role);
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }
