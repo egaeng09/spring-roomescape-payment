@@ -7,16 +7,17 @@ import roomescape.common.utils.Validator;
 import roomescape.reservation.domain.PaymentMethod;
 
 @FieldNameConstants(level = AccessLevel.PRIVATE)
-public record CreateReservationServiceRequest(
+public record CreateReservationWithPaymentServiceRequest(
         Long memberId,
         LocalDate date,
         Long timeId,
         Long themeId,
-        PaymentMethod paymentMethod
+        PaymentMethod paymentMethod,
+        Long paymentId
 ) {
 
-    public CreateReservationServiceRequest {
-        validate(memberId, date, timeId, themeId, paymentMethod);
+    public CreateReservationWithPaymentServiceRequest {
+        validate(memberId, date, timeId, themeId, paymentMethod, paymentId);
     }
 
     private void validate(
@@ -24,13 +25,15 @@ public record CreateReservationServiceRequest(
             final LocalDate date,
             final Long timeId,
             final Long themeId,
-            final PaymentMethod paymentMethod
+            final PaymentMethod paymentMethod,
+            final Long paymentId
     ) {
-        Validator.of(CreateReservationServiceRequest.class)
+        Validator.of(CreateReservationWithPaymentServiceRequest.class)
                 .notNullField(Fields.memberId, memberId)
                 .notNullField(Fields.date, date)
                 .notNullField(Fields.timeId, timeId)
                 .notNullField(Fields.themeId, themeId)
-                .notNullField(Fields.paymentMethod, paymentMethod);
+                .notNullField(Fields.paymentMethod, paymentMethod)
+                .notNullField(Fields.paymentId, paymentId);
     }
 }
