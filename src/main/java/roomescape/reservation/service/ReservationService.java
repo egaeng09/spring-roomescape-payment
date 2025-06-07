@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.common.exception.AlreadyExistException;
+import roomescape.common.exception.AuthorizationException;
+import roomescape.common.exception.error.GeneralErrorCode;
 import roomescape.member.auth.vo.MemberInfo;
 import roomescape.payment.domain.Payment;
 import roomescape.payment.service.PaymentService;
 import roomescape.payment.service.converter.PaymentConverter;
-import roomescape.payment.service.usecase.PaymentCommandUseCase;
-import roomescape.payment.service.usecase.PaymentQueryUseCase;
 import roomescape.reservation.controller.dto.AvailableReservationTimeWebResponse;
 import roomescape.reservation.controller.dto.CreateReservationWebRequest;
 import roomescape.reservation.controller.dto.CreateReservationWithMemberIdWebRequest;
@@ -148,7 +148,17 @@ public class ReservationService {
         }
     }
 
-    public void deleteWaiting(Long id) {
+    public void deleteWaiting(final Long id) {
+        waitingCommandUseCase.delete(id);
+    }
+
+    public void deleteWaiting(final Long id, final MemberInfo memberInfo) {
+        final Waiting waiting = waitingQueryUseCase.get(id);
+
+        if (!waiting.isOwner(memberInfo)) {
+            throw new AuthorizationException("대기의 소유자와 로그인된 회원이 일치하지 않습니다.", GeneralErrorCode.FORBIDDEN);
+        }
+
         waitingCommandUseCase.delete(id);
     }
 

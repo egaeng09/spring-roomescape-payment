@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import roomescape.common.utils.Validator;
+import roomescape.member.auth.vo.MemberInfo;
 import roomescape.member.domain.utils.RoleConverter;
 
 @Entity
@@ -60,5 +62,9 @@ public class Member {
 
     public boolean isAdmin() {
         return this.role.isEqual(Role.ADMIN);
+    }
+
+    public boolean isSameMember(final MemberInfo memberInfo) {
+        return Objects.equals(memberInfo.id(), id);
     }
 }

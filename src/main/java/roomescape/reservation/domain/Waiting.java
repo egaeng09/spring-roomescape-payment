@@ -17,6 +17,7 @@ import lombok.experimental.FieldNameConstants;
 import roomescape.common.BaseEntity;
 import roomescape.common.exception.BadRequestException;
 import roomescape.common.utils.Validator;
+import roomescape.member.auth.vo.MemberInfo;
 import roomescape.member.domain.Member;
 import roomescape.theme.domain.Theme;
 import roomescape.time.domain.ReservationTime;
@@ -102,5 +103,9 @@ public class Waiting extends BaseEntity {
         if (time.isBefore(now.toLocalTime())) {
             throw new BadRequestException("이미 지난 시간에는 예약할 수 없습니다.");
         }
+    }
+
+    public boolean isOwner(final MemberInfo memberInfo) {
+        return member.isSameMember(memberInfo);
     }
 }
