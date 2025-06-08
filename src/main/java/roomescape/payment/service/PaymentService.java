@@ -1,6 +1,7 @@
 package roomescape.payment.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import roomescape.payment.domain.Payment;
 import roomescape.payment.service.client.PaymentClient;
@@ -10,6 +11,7 @@ import roomescape.payment.service.dto.PaymentConfirmRequest;
 import roomescape.payment.service.usecase.PaymentCommandUseCase;
 import roomescape.payment.service.usecase.PaymentQueryUseCase;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
@@ -19,8 +21,10 @@ public class PaymentService {
     private final PaymentQueryUseCase paymentQueryUseCase;
 
     public Payment confirm(PaymentConfirmRequest paymentConfirmRequest) {
-        PaymentClientResponse confirm = paymentClient.confirm(paymentConfirmRequest);
-        return paymentCommandUseCase.create(PaymentConverter.toDomain(confirm));
+        final PaymentClientResponse confirm = paymentClient.confirm(paymentConfirmRequest);
+        final Payment payment = paymentCommandUseCase.create(PaymentConverter.toDomain(confirm));
+        log.info("Payment confirmed : paymentKey - {}, orderId - {}", payment.getPaymentKey(), payment.getOrderId());
+        return payment;
     }
 
     public Payment get(Long id) {

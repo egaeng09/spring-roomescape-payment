@@ -2,7 +2,7 @@ package roomescape.common.exception;
 
 import roomescape.common.exception.error.GeneralErrorCode;
 
-public class NotFoundException extends CustomException {
+public class NotFoundException extends BusinessException {
 
     public NotFoundException() {
         super("요청하신 자원을 찾을 수 없습니다.", GeneralErrorCode.NOT_FOUND);
