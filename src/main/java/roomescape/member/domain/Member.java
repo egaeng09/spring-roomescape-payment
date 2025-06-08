@@ -1,5 +1,6 @@
 package roomescape.member.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -36,6 +37,7 @@ public class Member {
     private MemberEmail email;
 
     @Convert(converter = RoleConverter.class)
+    @Column(nullable = false)
     private Role role;
 
     private static Member of(final Long id, final MemberName name, final MemberEmail email, final Role role) {

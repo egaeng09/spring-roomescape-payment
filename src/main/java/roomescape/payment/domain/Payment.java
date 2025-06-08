@@ -25,10 +25,10 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 200)
     private String paymentKey;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String orderId;
 
     @Column(nullable = false)
