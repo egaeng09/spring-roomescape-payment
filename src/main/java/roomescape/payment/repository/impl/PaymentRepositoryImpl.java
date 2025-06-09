@@ -22,4 +22,9 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     public Optional<Payment> findById(Long id) {
         return jpaPaymentRepository.findById(id);
     }
+
+    @Override
+    public Boolean existsByPaymentKey(final String paymentKey) {
+        return jpaPaymentRepository.existsByPaymentKey(paymentKey);
+    }
 }

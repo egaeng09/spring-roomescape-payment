@@ -5,4 +5,5 @@ import roomescape.payment.domain.Payment;
 
 public interface JpaPaymentRepository extends JpaRepository<Payment, Long> {
 
+    Boolean existsByPaymentKey(String paymentKey);
 }

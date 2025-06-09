@@ -103,6 +103,7 @@ public class Reservation {
             final Theme theme,
             final PaymentMethod status
     ) {
+        validatePast(date, time);
         return of(null, member, date, time, theme, status, null);
     }
 
@@ -114,7 +115,6 @@ public class Reservation {
             final PaymentMethod status,
             final Payment payment
     ) {
-
         validatePast(date, time);
         return of(null, member, date, time, theme, status, payment);
     }

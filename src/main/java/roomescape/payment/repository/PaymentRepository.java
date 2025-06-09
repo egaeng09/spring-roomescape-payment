@@ -7,5 +7,8 @@ public interface PaymentRepository {
 
     Payment save(Payment payment);
 
+    Boolean existsByPaymentKey(String paymentKey);
+
     Optional<Payment> findById(Long id);
+
 }

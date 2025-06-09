@@ -35,13 +35,15 @@ class ReservationTest {
                     member,
                     ReservationDate.from(LocalDate.now().minusDays(1L)),
                     ReservationTime.withoutId(LocalTime.now()),
-                    theme
+                    theme,
+                    PaymentMethod.PENDING_PAYMENT
             )).isInstanceOf(BadRequestException.class);
             softAssertions.assertThatThrownBy(() -> Reservation.withoutId(
                     member,
                     ReservationDate.from(LocalDate.now()),
                     ReservationTime.withoutId(LocalTime.now().minusMinutes(1L)),
-                    theme
+                    theme,
+                    PaymentMethod.PENDING_PAYMENT
             )).isInstanceOf(BadRequestException.class);
         });
     }

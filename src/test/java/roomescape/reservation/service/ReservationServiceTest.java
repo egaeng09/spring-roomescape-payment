@@ -17,6 +17,7 @@ import roomescape.member.repository.FakeMemberRepository;
 import roomescape.member.repository.MemberRepository;
 import roomescape.member.service.MemberConverter;
 import roomescape.member.service.usecase.MemberQueryUseCase;
+import roomescape.payment.repository.FakePaymentRepository;
 import roomescape.payment.repository.JpaPaymentRepository;
 import roomescape.payment.repository.PaymentRepository;
 import roomescape.payment.service.PaymentService;
@@ -60,7 +61,7 @@ class ReservationServiceTest {
     private PaymentRepository paymentRepository;
 
     @Mock
-    private PaymentCommandUseCase paymentCommandUseCase;
+    private PaymentService paymentService;
 
     @BeforeEach
     void setUp() {
@@ -76,7 +77,7 @@ class ReservationServiceTest {
 
         themeRepository = new FakeThemeRepository();
         memberRepository = new FakeMemberRepository();
-        paymentRepository = new JpaPaymentRepository();
+        paymentRepository = new FakePaymentRepository();
 
         final ReservationCommandUseCase reservationCommandUseCase = new ReservationCommandUseCase(
                 reservationRepository,
@@ -102,8 +103,7 @@ class ReservationServiceTest {
                 reservationCommandUseCase,
                 waitingCommandUseCase,
                 waitingQueryUseCase,
-                paymentCommandUseCase,
-                new PaymentQueryUseCase()
+                paymentService
         );
     }
 

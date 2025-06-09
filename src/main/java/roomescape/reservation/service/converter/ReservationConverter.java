@@ -119,6 +119,17 @@ public class ReservationConverter {
     }
 
     public static ReservationWithStatusResponse toDtoWithPayment(Reservation reservation) {
+        if (reservation.getStatus() == PaymentMethod.PENDING_PAYMENT || reservation.getPayment() == null) {
+            return new ReservationWithStatusResponse(
+                    reservation.getId(),
+                    reservation.getTheme().getName().getValue(),
+                    reservation.getDate().getValue(),
+                    reservation.getTime().getStartAt(),
+                    ReservationStatus.CONFIRM.getStatus(),
+                    null,
+                    null
+            );
+        }
         return new ReservationWithStatusResponse(
                 reservation.getId(),
                 reservation.getTheme().getName().getValue(),
