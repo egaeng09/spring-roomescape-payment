@@ -37,7 +37,7 @@ public class FakePaymentRepository implements PaymentRepository {
     @Override
     public Optional<Payment> findById(final Long id) {
         return payments.stream()
-                .filter(account -> account.getId().equals(id))
+                .filter(payment -> payment.getId().equals(id))
                 .findFirst();
     }
 }
