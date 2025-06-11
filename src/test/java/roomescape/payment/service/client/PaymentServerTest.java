@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import roomescape.common.exception.ConnectTimeOutException;
+import roomescape.common.exception.PaymentServerException;
 import roomescape.common.exception.ReadTimeOutException;
 import roomescape.common.exception.error.PaymentErrorCode;
 import roomescape.common.exception.PaymentException;
@@ -108,7 +109,7 @@ class PaymentServerTest {
         );
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
-                .isInstanceOf(PaymentException.class)
+                .isInstanceOf(PaymentServerException.class)
                 .hasFieldOrPropertyWithValue("errorCode", PaymentErrorCode.SERVER_ERROR);
     }
 

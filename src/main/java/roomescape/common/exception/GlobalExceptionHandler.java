@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
     }
 
+    @ExceptionHandler(PaymentServerException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentServerException(final PaymentServerException e,
+                                                                final HttpServletRequest request) {
+        log.error("External API Payment Server Error - URI '{} {}' ", request.getMethod(), request.getRequestURI(), e);
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse errorResponse = ErrorResponse.of(e, request);
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
     @ExceptionHandler(ConnectTimeOutException.class)
     public ResponseEntity<ErrorResponse> handleConnectTimeOutException(final ConnectTimeOutException e,
                                                                        final HttpServletRequest request) {
