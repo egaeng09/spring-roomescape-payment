@@ -130,6 +130,7 @@ class PaymentServerTest {
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
                 .isInstanceOf(PaymentException.class)
+                .hasMessage("이미 처리된 결제 입니다.")
                 .hasFieldOrPropertyWithValue("errorCode", PaymentErrorCode.CLIENT_ERROR);
     }
 
@@ -151,6 +152,7 @@ class PaymentServerTest {
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
                 .isInstanceOf(PaymentException.class)
+                .hasMessage("내부 시스템 처리 작업이 실패했습니다. 잠시 후 다시 시도해주세요.")
                 .hasFieldOrPropertyWithValue("errorCode", PaymentErrorCode.PAYMENT_SERVER_ERROR);
     }
 
@@ -166,7 +168,8 @@ class PaymentServerTest {
         );
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
-                .isInstanceOf(ReadTimeOutException.class);
+                .isInstanceOf(ReadTimeOutException.class)
+                .hasMessage("Read timed out");
     }
 
     @Test
@@ -186,6 +189,7 @@ class PaymentServerTest {
         paymentRestClient = new PaymentRestClient(restClient, TEST_SECRET_KEY);
 
         assertThatThrownBy(() -> paymentRestClient.confirm(requestDto))
-                .isInstanceOf(ConnectTimeOutException.class);
+                .isInstanceOf(ConnectTimeOutException.class)
+                .hasMessage("Connect timed out");
     }
 }

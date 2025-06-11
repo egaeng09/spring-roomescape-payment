@@ -200,6 +200,7 @@ class ReservationCommandUseCaseTest {
 
         // When & Then
         assertThatThrownBy(() -> reservationCommandUseCase.delete(id))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("요청하신 자원을 찾을 수 없습니다.");
     }
 }

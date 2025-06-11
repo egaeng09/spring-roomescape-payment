@@ -102,10 +102,10 @@ public class Waiting extends BaseEntity {
             return;
         }
         if (date.isBefore(now.toLocalDate())) {
-            throw new BadRequestException("지난 날짜는 예약할 수 없습니다.");
+            throw new BadRequestException("지난 날짜는 예약 대기할 수 없습니다.");
         }
         if (time.isBefore(now.toLocalTime())) {
-            throw new BadRequestException("이미 지난 시간에는 예약할 수 없습니다.");
+            throw new BadRequestException("이미 지난 시간에는 예약 대기할 수 없습니다.");
         }
     }
 

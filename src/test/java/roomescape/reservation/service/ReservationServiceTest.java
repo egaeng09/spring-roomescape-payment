@@ -208,7 +208,8 @@ class ReservationServiceTest {
 
         // When & Then
         assertThatThrownBy(() -> reservationService.create(request2, MemberConverter.toDto(member)))
-                .isInstanceOf(AlreadyExistException.class);
+                .isInstanceOf(AlreadyExistException.class)
+                .hasMessage("추가하려는 예약이 이미 존재합니다.");
     }
 
     @Test

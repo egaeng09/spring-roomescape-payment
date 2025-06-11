@@ -37,14 +37,16 @@ class ReservationTest {
                     ReservationTime.withoutId(LocalTime.now()),
                     theme,
                     PaymentMethod.PENDING_PAYMENT
-            )).isInstanceOf(BadRequestException.class);
+            )).isInstanceOf(BadRequestException.class)
+                    .hasMessage("지난 날짜는 예약할 수 없습니다.");
             softAssertions.assertThatThrownBy(() -> Reservation.withoutId(
                     member,
                     ReservationDate.from(LocalDate.now()),
                     ReservationTime.withoutId(LocalTime.now().minusMinutes(1L)),
                     theme,
                     PaymentMethod.PENDING_PAYMENT
-            )).isInstanceOf(BadRequestException.class);
+            )).isInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 지난 시간에는 예약할 수 없습니다.");
         });
     }
 }
