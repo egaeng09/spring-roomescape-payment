@@ -6,9 +6,9 @@ import roomescape.common.exception.NotFoundException;
 
 @Getter
 public enum PaymentMethod {
-    PENDING_PAYMENT("1"),
-    PAID_PG("2"),
-    PAID_ONSITE("3");
+    PENDING_PAYMENT("PENDING"),
+    PAID_PG("PG"),
+    PAID_ONSITE("ONSITE");
 
     private final String code;
 
