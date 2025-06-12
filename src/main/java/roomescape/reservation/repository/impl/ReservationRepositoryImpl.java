@@ -16,6 +16,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private final JpaReservationRepository jpaReservationRepository;
 
     @Override
+    public boolean existsById(final Long id) {
+        return jpaReservationRepository.existsById(id);
+    }
+
+    @Override
     public boolean existsByTimeId(Long timeId) {
         return jpaReservationRepository.existsByTimeId(timeId);
     }

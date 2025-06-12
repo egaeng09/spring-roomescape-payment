@@ -201,6 +201,6 @@ class ReservationCommandUseCaseTest {
         // When & Then
         assertThatThrownBy(() -> reservationCommandUseCase.delete(id))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("요청하신 자원을 찾을 수 없습니다.");
+                .hasMessage("id: %d에 해당하는 예약을 찾을 수 없습니다.", id);
     }
 }

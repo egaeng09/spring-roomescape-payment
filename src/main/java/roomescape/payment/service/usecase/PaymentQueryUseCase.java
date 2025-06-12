@@ -14,6 +14,6 @@ public class PaymentQueryUseCase {
 
     public Payment get(final Long id) {
         return paymentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("id에 해당하는 결제 내역을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("id: %d에 해당하는 예약을 찾을 수 없습니다.", id));
     }
 }

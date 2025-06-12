@@ -30,7 +30,7 @@ public enum Role {
         return Arrays.stream(values())
                 .filter(role -> role.getCode().equals(code))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException("해당 코드에 대한 권한이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 코드에 대한 권한이 존재하지 않습니다. : %s", code));
     }
 
     public boolean isEqual(Role role) {

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.common.exception.AlreadyExistException;
+import roomescape.common.exception.NotFoundException;
 import roomescape.member.domain.Member;
 import roomescape.member.service.usecase.MemberQueryUseCase;
 import roomescape.payment.domain.Payment;
@@ -76,6 +77,9 @@ public class ReservationCommandUseCase {
     }
 
     public void delete(final Long id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new NotFoundException("id: %d에 해당하는 예약을 찾을 수 없습니다.", id);
+        }
         reservationRepository.deleteById(id);
     }
 
