@@ -28,7 +28,7 @@ import roomescape.reservation.service.ReservationService;
 
 @RequiredArgsConstructor
 @RestController
-public class ReservationController {
+public class ReservationController implements SwaggerReservationController {
 
     public static final String BASE_PATH = "/reservations";
 

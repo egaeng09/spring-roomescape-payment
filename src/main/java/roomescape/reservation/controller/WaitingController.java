@@ -22,7 +22,7 @@ import roomescape.reservation.service.ReservationService;
 
 @RequiredArgsConstructor
 @RestController
-public class WaitingController {
+public class WaitingController implements SwaggerWaitingController {
 
     public static final String BASE_PATH = "/waitings";
 
